@@ -1,3 +1,4 @@
 # Home Assistant
 
-Scripts for home assistant. 
+A place for Home Assistant script and automation blueprints. 
+
