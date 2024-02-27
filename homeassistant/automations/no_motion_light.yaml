@@ -2,7 +2,7 @@ blueprint:
   name: No Motion Light Off
   description: Turn off a light when motion is not detected anymore.
   domain: automation
-  source_url: https://github.com/
+  source_url: https://github.com/DanTheMinotaur/rand/blob/main/homeassistant/automations/no_motion_light.yaml
   author: DanTheMinotaur
   input:
     motion_entity:
