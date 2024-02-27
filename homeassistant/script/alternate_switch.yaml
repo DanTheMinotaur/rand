@@ -1,0 +1,56 @@
+blueprint:
+  name: Alternate Switch
+  description: >-
+    Toggles a switch for a set period of time, ending in an 'off' state
+  domain: script
+  source_url: https://github.com/DanTheMinotaur/rand/blob/main/homeassistant/script/alternate_switch.yaml
+  author: DanTheMinotaur
+  input:
+    toggle_target:
+      name: Target Entity
+      description: The device to toggle
+      selector:
+        target:
+          entity:
+            domain: light
+    hours_to_run:
+      description: How long to run the script for in minutes
+      selector:
+        number:
+          min: 1
+          max: 24
+          unit_of_measurement: hours
+          mode: slider
+      default: 1
+    toggle_delay:
+      description: Time in minutes between toggles
+      selector:
+        number:
+          min: 1
+          max: 60
+          unit_of_measurement: minutes
+          mode: slider
+      default: 5
+    
+
+mode: restart
+
+sequence:
+  - repeat:
+      sequence:
+        - service: light.toggle
+          target: "{{ ent }}"
+        - delay:
+            hours: 0
+            minutes: !input toggle_delay
+            seconds: 0
+            milliseconds: 0
+      until:
+        - condition: template
+          value_template: "{{ as_timestamp(now()) >= as_timestamp(stop_time) }}"
+  - service: light.turn_off
+    target: "{{ ent }}"
+variables:
+  hours_to_run: !input hours_to_run
+  stop_time: "{{ now() + timedelta(hours=hours_to_run) }}"
+  ent: !input toggle_target
