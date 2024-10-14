@@ -1,0 +1,41 @@
+esphome:
+  name: ds18b20-sensor
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+  # baud_rate: 0  # Disable UART logging to save power
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: !secret ip_immersion_temperature
+    gateway: !secret gateway_ip
+    subnet: 255.255.255.0
+    dns1: !secret dns_primary
+    dns2: !secret dns_secondary
+
+one_wire:
+  - platform: gpio
+    pin: GPIO3
+
+sensor:
+  - platform: dallas_temp
+    # address: 0x000000000000  # You can omit this if you have only one sensor
+    name: "Immersion Temperature Sensor"
+    id: immersion_temperature
+    update_interval: 10s
+
